@@ -1,6 +1,6 @@
   
 from django.contrib import admin
-from assetstracking.models import Subscriber, Employee, RFID, Tag, Borrowing
+from .models import Subscriber, Employee, RFID, Tag, Borrowing
 
 # Register your models here.
 
