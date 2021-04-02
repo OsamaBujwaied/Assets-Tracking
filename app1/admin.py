@@ -3,7 +3,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from app1.models import *
+from .models import *
 
 admin.site.register(Customer)
 admin.site.register(Product)
