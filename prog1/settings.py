@@ -27,7 +27,7 @@ SECRET_KEY = 'l9ao=8*1pfvyfx2s%8gq@%_20c0n$07#ej3rcr^_o3fzun4&c2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['assets-tracking-coe.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['assets-tracking-testing.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'app1',
     'assetstracking'
 ]
 
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'prog1.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [str(BASE_DIR.joinpath('templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,3 +132,5 @@ MEDIA_URL = '/images/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+LOGIN_REDIRECT_URL = '/admin/'
