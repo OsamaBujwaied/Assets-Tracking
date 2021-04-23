@@ -26,7 +26,7 @@ class AssetsAdmin(admin.ModelAdmin):
 admin.site.register(Tag, AssetsAdmin)
 
 class BorrowedAssetsAdmin(admin.ModelAdmin):
-    list_display = ('borrowing_id', 'start_date', 'end_date', 'employee_id', 'tag_id', 'employee_id_scanned', 'asset_id_scanned', 'reader_code')
+    list_display = ('start_date', 'end_date', 'employee_id', 'tag_id', 'employee_id_scanned', 'asset_id_scanned', 'reader_code')
 admin.site.register(Borrowing, BorrowedAssetsAdmin)
 
 class ReadersAdmin(admin.ModelAdmin):
