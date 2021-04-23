@@ -8,9 +8,15 @@
 		<div class="card card-body">
 
 			<form action="" method="POST">
+				<h2>To borrow an asset, Choose the asset you need and the deadline below: </h2>
 				{% csrf_token %}
-				{{form}}
-				
+				{{ formset.management_form }}
+				{% for form in formset %}
+				    {{form}}
+					<hr>
+				{% endfor %}
+
+
 				<input type="submit" name="Submit">
 			</form>
 

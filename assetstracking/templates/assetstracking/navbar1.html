@@ -10,6 +10,9 @@
         <a class="nav-link" href="{% url 'index' %}">Home</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="{% url 'tags' user.employee.id">Tags</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
       </li>
       <li class="nav-item active">
@@ -22,6 +25,7 @@
 	 {% if user.is_authenticated %}
        <li>User: {{ user.get_username }}</li>
 	   <li>------Name of employee: {{ user.employee.employee_name }}</li>
+       <li><a href="{% url 'logout'%}?next={{request.path}}">-------Logout</a></li>
 	 {% else %}
        <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
 	 {% endif %}
