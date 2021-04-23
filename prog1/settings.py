@@ -28,6 +28,7 @@ SECRET_KEY = 'l9ao=8*1pfvyfx2s%8gq@%_20c0n$07#ej3rcr^_o3fzun4&c2'
 DEBUG = True
 
 ALLOWED_HOSTS = ['assets-tracking-coe.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['assets-tracking-testing.herokuapp.com', '127.0.0.1']
 
 
 
@@ -40,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'assetstracking'
 ]
 
@@ -134,3 +134,13 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_REDIRECT_URL = '/login'
+LOGOUT_REDIRECT_URL = '/'
+
+#xybapzlmqzkyofbo
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'AssetsTracking70@gmail.com'
+EMAIL_HOST_PASSWORD = 'xybapzlmqzkyofbo' #past the key or password app here
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'AssetsTracking70@gmail.com'
