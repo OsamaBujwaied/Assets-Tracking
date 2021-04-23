@@ -5,57 +5,18 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from datetime import date
-from django.forms import inlineformset_factory
+
 # Create your views here.
 from .models import *
 from .forms import BorrowingForm, BorrowingFormEmployee, AssetForm
-from django.core.mail import send_mail
+
 
 def login(request):
     context = {}
     return render(request, 'assetstracking/login.html', context)
 
 
-def SendingEmail(request):
-    today = date.today()
-    CurrentYear = today.strftime('%Y')
-    CurrentMounth = today.strftime('%m')
-    CurrentDay = today.strftime('%d')
-    print("CurrentYear: ",CurrentYear)
-    print("CurrentMounth: ",CurrentMounth)
-    print("CurrentDay: ",CurrentDay)
-    lastDay = Borrowing.objects.values_list('end_date', flat=True)
-    DeadlineYear = [x.strftime('%Y') for x in lastDay]
-    DeadlineMounth = [x.strftime('%m') for x in lastDay]
-    DeadlineDay = [x.strftime('%d') for x in lastDay]
-    print("the list is: ",DeadlineYear)
-    print("the list is: ",DeadlineMounth)
-    print("the list is: ",DeadlineDay)
-    count1=0
-    for i in DeadlineYear:
-        CheckValue = 0
-        if CurrentYear > DeadlineYear[count1]:
-            CheckValue = 1
-        if CurrentYear == DeadlineYear[count1] and CurrentMounth > DeadlineMounth[count1]:
-            CheckValue = 1
-        if CurrentYear == DeadlineYear[count1] and CurrentMounth == DeadlineMounth[count1] and CurrentDay > DeadlineDay[count1]:
-            CheckValue = 1
-        if CheckValue == 1:
-            send_mail(
-                'Borrowing deadline',
-                'One of the employee did not return the asset he borrowed',
-                'AssetsTracking70@gmail.com',
-                ['iyhmx7@gmail.com'],
-                fail_silently=False,)
-            print("here")
-        count1 = count1 + 1
-
-
-    context = {}
-    return HttpResponse(" X ")
-
-
-@login_required
+# @login_required
 def home(request): 
     today = date.today()
     lastDay = Borrowing.objects.values('end_date')
@@ -70,7 +31,7 @@ def home(request):
     return render(request, 'assetstracking/home.html', context)
 
 
-@login_required
+# @login_required
 def subscriber(request, subscriber_test): 
 
     subscriber = Subscriber.objects.get(id=subscriber_test)
@@ -96,7 +57,7 @@ def subscriber(request, subscriber_test):
                 }
     return render(request, 'assetstracking/subscriber.html', context)
 
-@login_required
+
 def employee(request, employee_test): 
 
     employee = Employee.objects.get(id=employee_test)
@@ -109,14 +70,13 @@ def employee(request, employee_test):
 
 
 
-@login_required
+
 def rfid(request): 
     rfid = RFID.objects.all()
     return HttpResponse('RDID reader page')
 
-@login_required
-def tags(request, subscriber_id1):
-    employee = Employee.objects.get(subscriber_id=subscriber_id1)
+
+def tags(request): 
     tags = Tag.objects.all()
     return render(request, 'assetstracking/tags.html', {'tags': tags})
 
@@ -125,41 +85,35 @@ def index(request):
     return render(request, 'assetstracking/index.html')
 
 
-@login_required
-def createBorrowing(request, pk):
 
-    employee = Employee.objects.get(id=pk)
-    BorrowingFormSet = inlineformset_factory(Employee, Borrowing, fields=('end_date','tag_id'))
-
-
-    formset = BorrowingFormSet(queryset=Borrowing.objects.none(), instance=employee)
+def createBorrowing(request):
+    form = BorrowingForm()
     if request.method == 'POST':
         #print('Printing POST:', request.POST)
-        #form = BorrowingForm(request.POST)
-        formset = BorrowingFormSet(request.POST, instance=employee)
-        if formset.is_valid():
-            formset.save()
-            return redirect('/login')
+        form = BorrowingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/subscriber/1')
 
-    context = {'formset':formset}
+    context = {'form':form}
     return render(request, 'assetstracking/createBorrowing.html', context)
 
-@login_required
+
 def updateBorrowing(request, borrowing_test):
-    BorrowingFormSet = inlineformset_factory(Employee, Borrowing, fields=('end_date','tag_id'))
+
     borrowing = Borrowing.objects.get(id=borrowing_test)
-    formset = BorrowingFormSet(queryset=Borrowing.objects.none(), instance=borrowing)
+    form = BorrowingForm(instance=borrowing)
 
     if request.method == 'POST':
-        formset = BorrowingFormSet(request.POST, instance=borrowing)
-        if formset.is_valid():
-            formset.save()
-            return redirect('/login')
+        form = BorrowingForm(request.POST, instance=borrowing)
+        if form.is_valid():
+            form.save()
+            return redirect('/subscriber/1')
 
-    context = {'formset':formset}
+    context = {'form':form}
     return render(request, 'assetstracking/createBorrowing.html', context)
 
-@login_required
+
 def deleteBorrowing(request, pk):
     borrowing = Borrowing.objects.get(id=pk)
     if request.method == "POST":
@@ -167,7 +121,7 @@ def deleteBorrowing(request, pk):
         return redirect('/subscriber/1')
     context = {'item': borrowing}
     return render(request, 'assetstracking/deleteBorrowing.html',context)
-@login_required
+    
 def extendBorrowing(request, pk):
 
     borrowing = Borrowing.objects.get(id=pk)
@@ -183,7 +137,7 @@ def extendBorrowing(request, pk):
     return render(request, 'assetstracking/createBorrowing.html', context)
 
 
-@login_required
+    
 def createAsset(request):
     form = AssetForm()
     if request.method == 'POST':
@@ -195,7 +149,7 @@ def createAsset(request):
 
     context = {'form':form}
     return render(request, 'assetstracking/createAsset.html', context)
-@login_required
+
 def updateAsset(request, pk):
     asset = Tag.objects.get(id=pk)
     form = AssetForm(instance=asset)
@@ -208,7 +162,7 @@ def updateAsset(request, pk):
 
     context = {'form':form}
     return render(request, 'assetstracking/createAsset.html', context)
-@login_required
+
 def deleteAsset(request, pk):
     asset = Tag.objects.get(id=pk)
     if request.method == "POST":
@@ -230,8 +184,6 @@ def packet(request):
     r = readers.count()
     count = 0
     count0 = 0
-    count1 = 0
-    count2 = 0
     if request.method == "POST":
         client_username = request.POST.__getitem__('username')
         client_password = request.POST.__getitem__('password')
@@ -243,6 +195,8 @@ def packet(request):
             if client_username == real_client_username and client_password == real_client_password:
                 tag_id = request.POST.__getitem__('TagID')
                 reader_id = request.POST.__getitem__('ReaderID')
+
+
 
                 for i in readers:
                     reader_id0 = str(model_to_dict(i)["rfid_id"])
@@ -313,60 +267,48 @@ def packet(request):
                                             continue
                                     break
                                 elif count == employees_list_count:
-                                    #print("This is not an employee ID!!")
-                                    #return HttpResponse("not employee id", content_type='text/plain')
-                                    #break
-                                    for q in assets_list:
-                                        asset_id3 = model_to_dict(q)["tag_id"]
-                                        asset_status = model_to_dict(q)["asset_status"]
-                                        id5 = model_to_dict(q)["id"]
-                                        count1 += 1
-                                        if tag_id == str(asset_id3):
-                                            for b in assets_borrowed:
-                                                count2 += 1
-                                                id1 = model_to_dict(b)["id"]
-                                                asset_id1 = b.tag_id.tag_id
-                                                reader_id_code = model_to_dict(b)["reader_code"]
-                                                employee1_scan_checker = model_to_dict(b)["employee_id_scanned"]
-                                                asset1_scan_checker = model_to_dict(b)["asset_id_scanned"]
-                                                print(employee1_scan_checker)
-                                                if tag_id == str(
-                                                        asset_id1) and employee1_scan_checker == 1 and reader_id[
-                                                                                                       0:3] == reader_id_code and asset1_scan_checker == 0:
-                                                    print("There is request for this asset.")
-                                                    update_asset_checker = assets_borrowed.get(id=id1)
-                                                    update_asset_checker.asset_id_scanned = 1
-                                                    update_asset_checker.save()
+                                    print("This is not an employee ID!!")
+                                    return HttpResponse("not employee id", content_type='text/plain')
+                                    break
+                                else:
+                                    continue
 
-                                                    update_asset_status = assets_list.get(id=id5)
-                                                    update_asset_status.asset_status = "Taken"
-                                                    update_asset_status.save()
-                                                    return HttpResponse("asset scanned", content_type='text/plain')
-                                                    break
-                                                elif tag_id == str(
-                                                        asset_id1) and employee1_scan_checker == 1 and asset1_scan_checker == 1:
-                                                    print("Asset Alread Scanned.")
-                                                    return HttpResponse("already scanned", content_type='text/plain')
-                                                    break
-                                                elif tag_id == str(asset_id1) and employee1_scan_checker == 0:
-                                                    print("Scan your employee ID first.")
-                                                    return HttpResponse("scan employee id first",
-                                                                        content_type='text/plain')
-                                                    break
-                                                elif count2 == (a):
-                                                    print("There is no request for this asset id")
-                                                    return HttpResponse("no request for asset",
-                                                                        content_type='text/plain')
-                                                    break
-                                                else:
-                                                    continue
+
+                        elif reader_id[3:] == "02":
+                            for k in assets_list:
+                                asset_id3 = model_to_dict(k)["tag_id"]
+                                count += 1
+                                if tag_id == str(asset_id3):
+                                    for j in assets_borrowed:
+                                        count0 += 1
+                                        id1 = model_to_dict(j)["id"]
+                                        asset_id1 = j.tag_id.tag_id
+                                        reader_id_code = model_to_dict(j)["reader_code"]
+                                        employee1_scan_checker = model_to_dict(j)["employee_id_scanned"]
+                                        asset1_scan_checker = model_to_dict(j)["asset_id_scanned"]
+                                        if tag_id == str(asset_id1) and employee1_scan_checker == 1 and reader_id[0:3] == reader_id_code:
+                                            print("There is request for this asset.")
+                                            update_asset_checker = assets_borrowed.get(id=id1)
+
+                                            update_asset_checker.asset_id_scanned = 1
+                                            update_asset_checker.save()
+                                            return HttpResponse("asset scanned", content_type='text/plain')
                                             break
-                                        elif count1 == assets_list_count:
-                                            print("This not an employee nor an asset ID!!")
-                                            return HttpResponse("not asset nor employee id", content_type='text/plain')
+                                        elif tag_id == str(asset_id1) and employee1_scan_checker == 0:
+                                            print("Scan your employee ID first.")
+                                            return HttpResponse("scan employee id first", content_type='text/plain')
+                                            break
+                                        elif count0 == (a):
+                                            print("There is no request for this asset id")
+                                            return HttpResponse("no request for asset", content_type='text/plain')
                                             break
                                         else:
                                             continue
+                                    break
+                                elif count == assets_list_count:
+                                    print("This not an asset ID!!")
+                                    return HttpResponse("not asset id", content_type='text/plain')
+                                    break
                                 else:
                                     continue
                 break
@@ -374,4 +316,4 @@ def packet(request):
                 print("You are not authorized.!!")
                 return HttpResponse("not authorized", content_type='text/plain')
                 break
-    return HttpResponse(" ", content_type='text/plain')
+    return HttpResponse("You Are Not Authorized To Access This Page!!!",  content_type='text/plain')

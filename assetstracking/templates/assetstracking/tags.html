@@ -1,5 +1,5 @@
 {%  extends 'assetstracking/main.html' %}
-{% load static %}
+
 {% block content %}
 
 		<br>
@@ -12,22 +12,22 @@
 				<div class="card card-body">
 					<table class="table">
 						<tr>
-							<th>Asset ID</th>
+							<th>ID</th>
 							<th>Name</th>
-							<th>Asset Current Location</th>
-							<th>Asset Status</th>
+							<th>Subscriber Id</th>
+							<th>Location</th>
+							<th>Status</th>
 
 						</tr>
 
 						{% for i in tags %}
-							{% if i.subscriber_id == user.employee.subscriber_id %}
-								<tr>
-									<td>{{i.tag_id}}</td>
-									<td>{{i.asset_name}}</td>
-									<td>{{i.asset_location}}</td>
-									<td>{{i.asset_status}}</td>
-								</tr>
-							{% endif %}
+							<tr>
+								<td>{{i.tag_id}}</td>
+								<td>{{i.asset_name}}</td>
+								<td>{{i.subscriber_id}}</td>
+								<td>{{i.rfid_id}}</td>
+								<td>{{i.asset_status}}</td>
+							</tr>
 						{% endfor %}
                         		
 					</table>
