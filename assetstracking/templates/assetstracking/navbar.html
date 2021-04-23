@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'assets' %}">Assets Tracking System</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'assets' %}">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'tags' %}">Tags</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">         </a>
+      </li>
+      <li class="nav-item active">
+        {% if perms.user.add_employee %}
+              <a class="nav-link" href="{% url 'login' %}">You have permission to do something in the foo app</a>
+          {% else %}
+              <a class="nav-link" href="{% url 'login' %}">You do not have permission to do something in the foo app</a>
+          {% endif %}
+      </li>
+	 {% if user.is_authenticated %}
+       <li>User: {{ user.get_username }}</li>
+	   <li>------Name of employee: {{ user.employee.employee_name }}</li>
+       <li><a href="{% url 'logout'%}?next={{request.path}}">-------Logout</a></li>
+	 {% else %}
+       <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+	 {% endif %}
+
+    </ul>
+  </div>
+</nav>
