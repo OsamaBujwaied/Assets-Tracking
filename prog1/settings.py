@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'l9ao=8*1pfvyfx2s%8gq@%_20c0n$07#ej3rcr^_o3fzun4&c2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = false
+DEBUG = true
 
 ALLOWED_HOSTS = ['assets-tracking-coe-try.herokuapp.com', '127.0.0.1']
 
