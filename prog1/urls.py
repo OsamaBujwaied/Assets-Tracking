@@ -23,7 +23,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('market/', include('app1.urls')),
     path('', include('assetstracking.urls')),
     path('assets/', include('django.contrib.auth.urls')),
     # path('', RedirectView.as_view(url='assets/', permanent=True)),

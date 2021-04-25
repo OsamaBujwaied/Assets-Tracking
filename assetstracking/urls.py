@@ -23,4 +23,6 @@ urlpatterns = [
     path('createAsset/', views.createAsset, name="createAsset"),
     path('updateAsset/<str:pk>/', views.updateAsset, name="updateAsset"),
     path('deleteAsset/<str:pk>/', views.deleteAsset, name="deleteAsset"),
+
+
 ]
